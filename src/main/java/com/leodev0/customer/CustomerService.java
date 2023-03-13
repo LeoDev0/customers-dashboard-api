@@ -1,5 +1,6 @@
 package com.leodev0.customer;
 
+import com.leodev0.exception.ResourceNotFound;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,9 @@ public class CustomerService {
     }
 
     public Customer getCostumerById(Integer id) {
-        return customerDao.selectCustomerById(id).orElseThrow(() -> new IllegalArgumentException("customer with id [%s] not found".formatted(id)));
+        return customerDao.selectCustomerById(id)
+                .orElseThrow(() -> new ResourceNotFound(
+                        "customer with id [%s] not found".formatted(id)
+                ));
     }
 }
