@@ -50,4 +50,18 @@ public class CustomerListDataAccessService implements CustomerDao {
         return customers.stream()
                 .anyMatch(customer -> customer.getEmail().equals(email));
     }
+
+    @Override
+    public void deleteCustomerById(Integer id) {
+        customers.stream()
+                .filter(customer -> customer.getId().equals(id))
+                .findFirst()
+                .ifPresent(customer -> customers.remove(customer));
+    }
+
+    @Override
+    public boolean existsPersonWithId(Integer id) {
+        return customers.stream()
+                .anyMatch(customer -> customer.getId().equals(id));
+    }
 }
