@@ -1,6 +1,7 @@
 package com.leodev0.customer;
 
 import com.leodev0.exception.DuplicateResourceException;
+import com.leodev0.exception.RequestValidationException;
 import com.leodev0.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -48,5 +49,47 @@ public class CustomerService {
         }
 
         customerDao.deleteCustomerById(id);
+    }
+
+    public void updateCustomer(Integer id, CustomerUpdateRequest updateRequest) {
+        Customer customer = getCostumerById(id);
+        boolean changes = false;
+
+        if (isValidUpdatableField(updateRequest.name(), customer.getName())) {
+            customer.setName(updateRequest.name());
+            changes = true;
+        }
+
+        if (isValidUpdatableField(updateRequest.age(), customer.getAge())) {
+            customer.setAge(updateRequest.age());
+            changes = true;
+        }
+
+        if (isValidUpdatableField(updateRequest.email(), customer.getEmail())) {
+            if (customerDao.existsPersonWithEmail(updateRequest.email())) {
+                throw new DuplicateResourceException("Email already taken");
+            }
+
+            customer.setEmail(updateRequest.email());
+            changes = true;
+        }
+
+        if (!changes) {
+            throw new RequestValidationException("No data changes found");
+        }
+
+        customerDao.updateCustomer(customer);
+    }
+
+    private <T> boolean isValidUpdatableField(T requestField, T entityField) {
+        if (requestField == null) {
+            return false;
+        }
+
+        if (requestField.equals(entityField)) {
+            return false;
+        }
+
+        return true;
     }
 }

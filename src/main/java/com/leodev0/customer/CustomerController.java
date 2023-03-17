@@ -34,4 +34,9 @@ public class CustomerController {
     public void deleteCustomer(@PathVariable Integer id) {
         customerService.deleteCustomerById(id);
     }
+
+    @PutMapping("/{id}")
+    public void updateCustomer(@PathVariable Integer id, @RequestBody CustomerUpdateRequest updateRequest) {
+        customerService.updateCustomer(id, updateRequest);
+    }
 }
