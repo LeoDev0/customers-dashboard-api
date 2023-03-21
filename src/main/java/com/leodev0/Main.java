@@ -44,7 +44,7 @@ public class Main {
                     19
             );
 
-            customerRepository.saveAll(List.of(alex, jamila));
+//            customerRepository.saveAll(List.of(alex, jamila));
         };
     }
 }
