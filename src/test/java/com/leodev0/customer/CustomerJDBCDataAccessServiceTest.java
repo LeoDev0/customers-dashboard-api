@@ -76,21 +76,181 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
 
     @Test
     void insertCustomer() {
+        Customer customer = new Customer(
+                FAKER.name().fullName(),
+                FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID(),
+                FAKER.number().numberBetween(18, 70)
+        );
+
+        underTest.insertCustomer(customer);
+
+        var customerId = underTest.selectAllCustomers()
+                .stream()
+                .filter(c -> c.getEmail().equals(customer.getEmail()))
+                .map(Customer::getId)
+                .findFirst()
+                .orElseThrow();
+
+        Optional<Customer> findSavedCustomer = underTest.selectCustomerById(customerId);
+
+        assertThat(findSavedCustomer).isPresent().hasValueSatisfying(c -> {
+            assertThat(c.getId()).isEqualTo(customerId);
+            assertThat(c.getName()).isEqualTo(customer.getName());
+            assertThat(c.getEmail()).isEqualTo(customer.getEmail());
+            assertThat(c.getAge()).isEqualTo(customer.getAge());
+        });
     }
 
     @Test
     void existsPersonWithEmail() {
+        String email = FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID();
+
+        Customer customer = new Customer(
+                FAKER.name().fullName(),
+                email,
+                FAKER.number().numberBetween(18, 70)
+        );
+
+        underTest.insertCustomer(customer);
+
+        boolean actual = underTest.existsPersonWithEmail(email);
+
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void existsPersonWithEmailReturnsFalseWhenDoesNotExists() {
+        String email = FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID();
+
+        boolean actual = underTest.existsPersonWithEmail(email);
+
+        assertThat(actual).isFalse();
     }
 
     @Test
     void deleteCustomerById() {
+        Customer customer = new Customer(
+                FAKER.name().fullName(),
+                FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID(),
+                FAKER.number().numberBetween(18, 70)
+        );
+
+        underTest.insertCustomer(customer);
+
+        var customerId = underTest.selectAllCustomers()
+                .stream()
+                .filter(c -> c.getEmail().equals(customer.getEmail()))
+                .map(Customer::getId)
+                .findFirst()
+                .orElseThrow();
+
+        underTest.deleteCustomerById(customerId);
+
+        boolean customerExists = underTest.existsPersonWithId(customerId);
+
+        assertThat(customerExists).isFalse();
     }
 
     @Test
-    void existsPersonWithId() {
+    void existsCustomerWithId() {
+        Customer customer = new Customer(
+                FAKER.name().fullName(),
+                FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID(),
+                FAKER.number().numberBetween(18, 70)
+        );
+
+        underTest.insertCustomer(customer);
+
+        var customerId = underTest.selectAllCustomers()
+                .stream()
+                .filter(c -> c.getEmail().equals(customer.getEmail()))
+                .map(Customer::getId)
+                .findFirst()
+                .orElseThrow();
+
+        boolean actual = underTest.existsPersonWithId(customerId);
+
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void existsCustomerWithIdReturnsFalseWhenIdNotPresent() {
+        var id = -1;
+
+        boolean actual = underTest.existsPersonWithId(id);
+
+        assertThat(actual).isFalse();
     }
 
     @Test
     void updateCustomer() {
+        Customer customer = new Customer(
+                FAKER.name().fullName(),
+                FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID(),
+                FAKER.number().numberBetween(18, 70)
+        );
+
+        underTest.insertCustomer(customer);
+
+        var customerId = underTest.selectAllCustomers()
+                .stream()
+                .filter(c -> c.getEmail().equals(customer.getEmail()))
+                .map(Customer::getId)
+                .findFirst()
+                .orElseThrow();
+
+        Customer updateCustomerObject = new Customer(
+                customerId,
+                FAKER.name().fullName(),
+                FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID(),
+                FAKER.number().numberBetween(18, 70)
+        );
+
+        underTest.updateCustomer(updateCustomerObject);
+
+        Optional<Customer> actual = underTest.selectCustomerById(customerId);
+
+        assertThat(actual).isPresent().hasValueSatisfying(c -> {
+            assertThat(c.getId()).isEqualTo(customerId);
+            assertThat(c.getName()).isEqualTo(updateCustomerObject.getName());
+            assertThat(c.getEmail()).isEqualTo(updateCustomerObject.getEmail());
+            assertThat(c.getAge()).isEqualTo(updateCustomerObject.getAge());
+        });
+    }
+
+    @Test
+    void willNotUpdateWhenNothingToUpdate() {
+        // Given
+        String email = FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID();
+        Customer customer = new Customer(
+                FAKER.name().fullName(),
+                email,
+                20
+        );
+
+        underTest.insertCustomer(customer);
+
+        int id = underTest.selectAllCustomers()
+                .stream()
+                .filter(c -> c.getEmail().equals(email))
+                .map(Customer::getId)
+                .findFirst()
+                .orElseThrow();
+
+        // When update without no changes
+        Customer update = new Customer();
+        update.setId(id);
+
+        underTest.updateCustomer(update);
+
+        // Then
+        Optional<Customer> actual = underTest.selectCustomerById(id);
+
+        assertThat(actual).isPresent().hasValueSatisfying(c -> {
+            assertThat(c.getId()).isEqualTo(id);
+            assertThat(c.getAge()).isEqualTo(customer.getAge());
+            assertThat(c.getName()).isEqualTo(customer.getName());
+            assertThat(c.getEmail()).isEqualTo(customer.getEmail());
+        });
     }
 }
