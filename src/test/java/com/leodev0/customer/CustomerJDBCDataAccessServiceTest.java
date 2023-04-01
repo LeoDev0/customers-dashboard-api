@@ -102,7 +102,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
     }
 
     @Test
-    void existsPersonWithEmail() {
+    void existsCustomerWithEmail() {
         String email = FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID();
 
         Customer customer = new Customer(
@@ -113,16 +113,16 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
 
         underTest.insertCustomer(customer);
 
-        boolean actual = underTest.existsPersonWithEmail(email);
+        boolean actual = underTest.existsCustomerWithEmail(email);
 
         assertThat(actual).isTrue();
     }
 
     @Test
-    void existsPersonWithEmailReturnsFalseWhenDoesNotExists() {
+    void existsCustomerWithEmailReturnsFalseWhenDoesNotExists() {
         String email = FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID();
 
-        boolean actual = underTest.existsPersonWithEmail(email);
+        boolean actual = underTest.existsCustomerWithEmail(email);
 
         assertThat(actual).isFalse();
     }
@@ -146,7 +146,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
 
         underTest.deleteCustomerById(customerId);
 
-        boolean customerExists = underTest.existsPersonWithId(customerId);
+        boolean customerExists = underTest.existsCustomerWithId(customerId);
 
         assertThat(customerExists).isFalse();
     }
@@ -168,7 +168,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
                 .findFirst()
                 .orElseThrow();
 
-        boolean actual = underTest.existsPersonWithId(customerId);
+        boolean actual = underTest.existsCustomerWithId(customerId);
 
         assertThat(actual).isTrue();
     }
@@ -177,7 +177,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
     void existsCustomerWithIdReturnsFalseWhenIdNotPresent() {
         var id = -1;
 
-        boolean actual = underTest.existsPersonWithId(id);
+        boolean actual = underTest.existsCustomerWithId(id);
 
         assertThat(actual).isFalse();
     }
