@@ -82,11 +82,7 @@ public class CustomerService {
     }
 
     private <T> boolean isValidUpdatableField(T requestField, T entityField) {
-        if (requestField == null) {
-            return false;
-        }
-
-        if (requestField.equals(entityField)) {
+        if (requestField == null || requestField.equals(entityField)) {
             return false;
         }
 
