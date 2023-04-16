@@ -87,5 +87,7 @@ public class CustomerService {
         }
 
         return true;
+
+//        return requestField != null && !requestField.equals(entityField); // simplified version
     }
 }
