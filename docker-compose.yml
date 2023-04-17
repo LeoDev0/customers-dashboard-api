@@ -18,7 +18,7 @@ services:
     container_name: customers-dashboard-api
     image: leodev0/customers-dashboard-api
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/customer
     ports:
       - "8088:8080"
     networks:
