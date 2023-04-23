@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "customers-dashboard-api",
-      "image": "leodev0/customers-dashboard-api:latest",
+      "image": "leodev0/customers-dashboard-api:23.04.2023.00.47.34",
       "essential": true,
       "memory": 512,
       "portMappings": [
