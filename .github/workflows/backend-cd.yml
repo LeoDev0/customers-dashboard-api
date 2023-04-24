@@ -29,7 +29,7 @@ jobs:
       - name: Send Slack Message
         run: >
           curl -X POST -H 'Content-type: application/json'
-          --data '{"text":"Deployment started :loading:"}' 
+          --data '{"text":":loading: Deployment started"}' 
           ${{ secrets.SLACK_WEBHOOK_URL }}
       - uses: actions/setup-java@v3
         with:
@@ -54,7 +54,7 @@ jobs:
       - name: Send Slack Message
         run: >
           curl -X POST -H 'Content-type: application/json' 
-          --data '{"text":":docker: Image tag:${{steps.build-number.outputs.BUILD_NUMBER}} pushed to https://hub.docker.com/repository/docker/leodev0/customers-dashboard-api"}' 
+          --data '{"text":":docker: Image tag: *${{steps.build-number.outputs.BUILD_NUMBER}}* pushed to https://hub.docker.com/r/leodev0/customers-dashboard-api/tags"}' 
           ${{ secrets.SLACK_WEBHOOK_URL }}
       - name: Update Dockerrun.aws.json api image tag with new build number
         run: |
