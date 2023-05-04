@@ -1,6 +1,7 @@
 package com.leodev0.customer;
 
 import com.github.javafaker.Faker;
+import com.leodev0.customer.enums.Gender;
 import com.leodev0.exception.DuplicateResourceException;
 import com.leodev0.exception.RequestValidationException;
 import com.leodev0.exception.ResourceNotFoundException;
@@ -50,7 +51,8 @@ class CustomerServiceTest {
                 id,
                 faker.name().fullName(),
                 faker.internet().safeEmailAddress(),
-                faker.number().numberBetween(18, 70)
+                faker.number().numberBetween(18, 70),
+                Gender.MALE
         );
 
         Mockito.when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
@@ -81,7 +83,8 @@ class CustomerServiceTest {
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
                 faker.name().fullName(),
                 email,
-                faker.number().numberBetween(18, 70)
+                faker.number().numberBetween(18, 70),
+                Gender.MALE
         );
 
         underTest.addCustomer(request);
@@ -107,7 +110,8 @@ class CustomerServiceTest {
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
                 faker.name().fullName(),
                 email,
-                faker.number().numberBetween(18, 70)
+                faker.number().numberBetween(18, 70),
+                Gender.MALE
         );
 
 
@@ -146,19 +150,22 @@ class CustomerServiceTest {
         String name = faker.name().fullName();
         String email = faker.internet().safeEmailAddress();
         int age = faker.number().numberBetween(18, 70);
+        Gender gender = Gender.MALE;
 
         Customer customer = new Customer(
                 id,
                 name,
                 email,
-                age
+                age,
+                gender
         );
 
         String newEmail = faker.internet().safeEmailAddress();
         CustomerUpdateRequest request = new CustomerUpdateRequest(
                 faker.name().fullName(),
                 newEmail,
-                faker.number().numberBetween(18, 70)
+                faker.number().numberBetween(18, 70),
+                Gender.MALE
         );
 
         Mockito.when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
@@ -179,16 +186,19 @@ class CustomerServiceTest {
         String name = faker.name().fullName();
         String email = faker.internet().safeEmailAddress();
         int age = faker.number().numberBetween(18, 70);
+        Gender gender = Gender.MALE;
 
         Customer customer = new Customer(
                 id,
                 name,
                 email,
-                age
+                age,
+                gender
         );
 
         CustomerUpdateRequest request = new CustomerUpdateRequest(
                 faker.name().fullName(),
+                null,
                 null,
                 null
         );
@@ -213,19 +223,22 @@ class CustomerServiceTest {
         String name = faker.name().fullName();
         String email = faker.internet().safeEmailAddress();
         int age = faker.number().numberBetween(18, 70);
+        Gender gender = Gender.MALE;
 
         Customer customer = new Customer(
                 id,
                 name,
                 email,
-                age
+                age,
+                gender
         );
 
         String newEmail = faker.internet().safeEmailAddress();
         CustomerUpdateRequest request = new CustomerUpdateRequest(
                 customer.getName(),
                 newEmail,
-                customer.getAge()
+                customer.getAge(),
+                customer.getGender()
         );
 
         Mockito.when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
@@ -243,18 +256,21 @@ class CustomerServiceTest {
         String name = faker.name().fullName();
         String email = faker.internet().safeEmailAddress();
         int age = faker.number().numberBetween(18, 70);
+        Gender gender = Gender.MALE;
 
         Customer customer = new Customer(
                 id,
                 name,
                 email,
-                age
+                age,
+                gender
         );
 
         CustomerUpdateRequest request = new CustomerUpdateRequest(
                 customer.getName(),
                 customer.getEmail(),
-                customer.getAge()
+                customer.getAge(),
+                customer.getGender()
         );
 
         Mockito.when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));

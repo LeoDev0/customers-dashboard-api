@@ -5,6 +5,7 @@ import com.leodev0.AbstractTestcontainers;
 import com.leodev0.customer.Customer;
 import com.leodev0.customer.CustomerRegistrationRequest;
 import com.leodev0.customer.CustomerUpdateRequest;
+import com.leodev0.customer.enums.Gender;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,9 +34,10 @@ public class CustomerIntegrationTest extends AbstractTestcontainers {
         String name = FAKER.name().fullName();
         String email = FAKER.internet().safeEmailAddress();
         int age = RANDOM.nextInt(1, 100);
+        Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
-                name, email, age
+                name, email, age, gender
         );
 
         webTestClient.post()
@@ -56,7 +58,7 @@ public class CustomerIntegrationTest extends AbstractTestcontainers {
                 .getResponseBody();
 
         Customer expectedCustomer = new Customer(
-                name, email, age
+                name, email, age, gender
         );
 
         assertThat(allCustomers)
@@ -85,9 +87,10 @@ public class CustomerIntegrationTest extends AbstractTestcontainers {
         String name = FAKER.name().fullName();
         String email = FAKER.internet().safeEmailAddress();
         int age = RANDOM.nextInt(1, 100);
+        Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
-                name, email, age
+                name, email, age, gender
         );
 
         webTestClient.post()
@@ -138,9 +141,10 @@ public class CustomerIntegrationTest extends AbstractTestcontainers {
         String name = FAKER.name().fullName();
         String email = FAKER.internet().safeEmailAddress();
         int age = RANDOM.nextInt(1, 100);
+        Gender gender = Gender.MALE;
 
         CustomerRegistrationRequest registrationRequest = new CustomerRegistrationRequest(
-                name, email, age
+                name, email, age, gender
         );
 
         webTestClient.post()
@@ -161,7 +165,7 @@ public class CustomerIntegrationTest extends AbstractTestcontainers {
                 .getResponseBody();
 
         Customer expectedCustomer = new Customer(
-                name, email, age
+                name, email, age, gender
         );
 
         assertThat(allCustomers)
@@ -185,9 +189,10 @@ public class CustomerIntegrationTest extends AbstractTestcontainers {
                 .isEqualTo(expectedCustomer);
 
         String newName = FAKER.name().fullName();
+        Gender newGender = Gender.FEMALE;
 
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
-                newName, null, null
+                newName, null, null, newGender
         );
 
         webTestClient.put()
@@ -211,7 +216,8 @@ public class CustomerIntegrationTest extends AbstractTestcontainers {
                 id,
                 updateRequest.name(),
                 registrationRequest.email(),
-                registrationRequest.age()
+                registrationRequest.age(),
+                updateRequest.gender()
         );
 
         assertThat(updatedCustomer).isEqualTo(expected);
