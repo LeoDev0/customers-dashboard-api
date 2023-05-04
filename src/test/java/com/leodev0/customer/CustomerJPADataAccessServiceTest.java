@@ -1,6 +1,7 @@
 package com.leodev0.customer;
 
 import com.github.javafaker.Faker;
+import com.leodev0.customer.enums.Gender;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,7 +52,8 @@ class CustomerJPADataAccessServiceTest {
         Customer customer = new Customer(
                 faker.name().fullName(),
                 faker.internet().safeEmailAddress(),
-                faker.number().numberBetween(18, 70)
+                faker.number().numberBetween(18, 70),
+                Gender.MALE
         );
 
         underTest.insertCustomer(customer);
@@ -92,7 +94,8 @@ class CustomerJPADataAccessServiceTest {
                 1,
                 faker.name().fullName(),
                 faker.internet().safeEmailAddress(),
-                faker.number().numberBetween(18, 70)
+                faker.number().numberBetween(18, 70),
+                Gender.MALE
         );
 
         underTest.updateCustomer(customer);

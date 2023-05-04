@@ -1,6 +1,7 @@
 package com.leodev0.customer;
 
 import com.leodev0.AbstractTestcontainers;
+import com.leodev0.customer.enums.Gender;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,8 @@ class CustomerRepositoryTest extends AbstractTestcontainers {
         Customer customer = new Customer(
                 FAKER.name().fullName(),
                 email,
-                FAKER.number().numberBetween(18, 70)
+                FAKER.number().numberBetween(18, 70),
+                Gender.MALE
         );
 
         underTest.save(customer);
@@ -54,7 +56,8 @@ class CustomerRepositoryTest extends AbstractTestcontainers {
         Customer customer = new Customer(
                 FAKER.name().fullName(),
                 FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID(),
-                FAKER.number().numberBetween(18, 70)
+                FAKER.number().numberBetween(18, 70),
+                Gender.MALE
         );
 
         underTest.save(customer);

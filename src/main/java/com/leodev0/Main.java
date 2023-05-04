@@ -5,6 +5,7 @@ import com.github.javafaker.Name;
 import com.github.javafaker.Number;
 import com.leodev0.customer.Customer;
 import com.leodev0.customer.CustomerRepository;
+import com.leodev0.customer.enums.Gender;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ConfigurableBootstrapContext;
 import org.springframework.boot.SpringApplication;
@@ -44,11 +45,13 @@ public class Main {
 //                String firstName = nameWords[0].toLowerCase();
 //                String lastName = nameWords[nameWords.length - 1].toLowerCase();
 //                String email = firstName + "." + lastName + "@" + faker.internet().domainName();
-//                Integer age = faker.number().numberBetween(18, 70);
+//                int age = faker.number().numberBetween(18, 70);
+//                Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
 //                Customer customer = new Customer(
 //                        name,
 //                        email,
-//                        age
+//                        age,
+//                        gender
 //                );
 //                customers.add(customer);
 //            }

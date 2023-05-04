@@ -21,7 +21,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     @Override
     public List<Customer> selectAllCustomers() {
         String sql = """
-                SELECT id, name, email, age
+                SELECT id, name, email, age, gender
                 FROM customer
                 """;
 
@@ -33,7 +33,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     @Override
     public Optional<Customer> selectCustomerById(Integer id) {
         String sql = """
-                SELECT id, name, email, age
+                SELECT id, name, email, age, gender
                 FROM customer
                 WHERE id = ?
                 LIMIT 1
@@ -55,15 +55,16 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     @Override
     public void insertCustomer(Customer customer) {
         String sql = """
-                INSERT INTO customer (name, email, age)
-                VALUES (?, ?, ?)
+                INSERT INTO customer (name, email, age, gender)
+                VALUES (?, ?, ?, ?)
                 """;
 
         int update = jdbcTemplate.update(
                 sql,
                 customer.getName(),
                 customer.getEmail(),
-                customer.getAge()
+                customer.getAge(),
+                customer.getGender().name()
         );
 
         System.out.println("[%s] rows affected: %s".formatted(sql, update));
@@ -135,6 +136,16 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
                     """;
             int rowsAffected = jdbcTemplate.update(sqlAge, update.getAge(), update.getId());
             System.out.println("[%s] rows affected: %s".formatted(sqlAge, rowsAffected));
+        }
+
+        if (update.getGender() != null) {
+            String sqlGender= """
+                    UPDATE customer
+                    SET gender = ?
+                    WHERE id = ?
+                    """;
+            int rowsAffected = jdbcTemplate.update(sqlGender, update.getGender().name(), update.getId());
+            System.out.println("[%s] rows affected: %s".formatted(sqlGender, rowsAffected));
         }
     }
 }

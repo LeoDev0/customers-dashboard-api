@@ -1,5 +1,6 @@
 package com.leodev0.customer;
 
+import com.leodev0.customer.enums.Gender;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -17,13 +18,15 @@ public class CustomerListDataAccessService implements CustomerDao {
                 1,
                 "Alex",
                 "alex@gmail.com",
-                21
+                21,
+                Gender.MALE
         );
         Customer jamila = new Customer(
                 2,
                 "Jamila",
                 "jamila@gmail.com",
-                19
+                19,
+                Gender.FEMALE
         );
         customers.addAll(List.of(alex, jamila));
     }

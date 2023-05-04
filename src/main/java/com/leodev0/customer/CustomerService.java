@@ -37,7 +37,8 @@ public class CustomerService {
         Customer customer = new Customer(
                 customerRegistrationRequest.name(),
                 customerRegistrationRequest.email(),
-                customerRegistrationRequest.age()
+                customerRegistrationRequest.age(),
+                customerRegistrationRequest.gender()
         );
 
         customerDao.insertCustomer(customer);
@@ -62,6 +63,11 @@ public class CustomerService {
 
         if (isValidUpdatableField(updateRequest.age(), customer.getAge())) {
             customer.setAge(updateRequest.age());
+            changes = true;
+        }
+
+        if (isValidUpdatableField(updateRequest.gender(), customer.getGender())) {
+            customer.setGender(updateRequest.gender());
             changes = true;
         }
 
